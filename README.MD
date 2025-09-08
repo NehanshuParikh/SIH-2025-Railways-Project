@@ -37,9 +37,9 @@ We propose a **web-based railway traffic control system** that:
 
 ```text
                 ┌──────────────┐
-                │   Simulator   │
-                │ (fake trains) │
-                └───────┬───────┘
+                │   Simulator  │
+                │ (fake trains)│
+                └───────┬──────┘
                         │ Telemetry (location, speed)
                         ▼
                  ┌───────────────┐
