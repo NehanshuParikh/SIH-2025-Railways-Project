@@ -67,6 +67,38 @@ User {
   passwordHash: String
 }
 ```
+### Train 🚂
+```text 
+Train{
+    trainId: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    type: { type: String, enum: ["EXPRESS", "PASSENGER", "FREIGHT"], required: true },
+    priority: { type: Number, default: 1 },
+
+    schedule: {
+      startStation: { type: mongoose.Schema.Types.ObjectId, ref: "Station", required: true },
+      endStation: { type: mongoose.Schema.Types.ObjectId, ref: "Station", required: true },
+
+      // 👇 stops array is completely optional
+      stops: [
+        {
+          station: { type: mongoose.Schema.Types.ObjectId, ref: "Station" },
+          arrivalTime: { type: Date },
+          departureTime: { type: Date },
+          haltMinutes: { type: Number, default: 0 }
+        }
+      ],
+
+      departureTime: { type: Date, required: true },
+      arrivalTime: { type: Date, required: true },
+    },
+
+    currentSection: { type: mongoose.Schema.Types.ObjectId, ref: "Section" },
+    currentTrack: { type: mongoose.Schema.Types.ObjectId, ref: "Track" },
+    status: { type: String, enum: ["RUNNING", "STOPPED"], default: "STOPPED" },
+  },
+
+```
 
 ### Station 🚉
 ```text 
@@ -206,6 +238,89 @@ Represents a real or simulated train.
     
 *   Helps AI check if two trains are too close.
     
+👤 Roles & Responsibilities
+---------------------------
+
+### 🛡️ Admin
+
+The **Admin** is the top-level user who manages the system setup and users.
+
+**Responsibilities:**
+
+1.  **User Management:**
+    
+    *   Manage permissions & Override operator's decisions in case of emergency and can see all operator's actions.
+        
+2.  **Station, Section, Track, Signal Management:**
+    
+    *   Add/edit/delete stations, sections, tracks, and signals.
+        
+    *   Ensure the railway network is accurately mapped in the system.
+        
+3.  **System Oversight:**
+    
+    *   View all train movements, telemetry logs, and decision history.
+        
+4.  **Operator Duties:**
+    
+    *   Assign duties or monitoring tasks to operators.
+        
+    *   Approve critical overrides or emergency actions if required.
+        
+
+**Example:**
+
+*   Admin adds a new station: Ahmedabad Junction 🚉.
+    
+*   Admin adds a new section: Ahmedabad → Vadodara 📏.
+    
+*   Admin assigns an operator to monitor Section 1.
+    
+
+### 🎛️ Operator
+
+The **Operator** monitors and manages real-time train operations.
+
+**Responsibilities:**
+
+1.  **Monitor Trains in Real-Time:**
+    
+    *   Check live train positions on the dashboard.
+        
+    *   Track speed, section, and signals.
+        
+2.  **Decision Making / Overrides:**
+    
+    *   Apply operator decisions if AI/rule engine cannot resolve conflicts automatically.
+        
+    *   Example: Stop a train on a track, or reroute in case of emergency.
+        
+3.  **Signal Control:**
+    
+    *   Can manually change signal status if needed for safety.
+        
+4.  **Reporting:**
+    
+    *   Log observations or incidents for admin review.
+        
+
+**Example:**
+
+*   A train is approaching a busy section. The **rule engine suggests Train A moves first**, but the operator sees an issue → operator manually reroutes Train B instead.
+    
+
+### 🔹 How Admin & Operator Interact
+
+1.  Admin sets up the system → defines stations, sections, tracks, signals.
+    
+2.  Admin creates operator accounts and assigns sections to monitor.
+    
+3.  Operator monitors trains in real-time → AI suggests decisions.
+    
+4.  Operator approves/overrides decisions → system updates tracks and signals.
+    
+5.  Admin can review logs to check **all decisions and operator actions**.
+
 
 🔄 Entity Flow
 --------------
