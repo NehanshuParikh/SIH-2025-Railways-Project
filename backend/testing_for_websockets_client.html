@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h2>WebSocket Test</h2>
+    <p>It is working as web socket for backend is connecting with this html file ( as a frontend )</p>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const socket = io("http://localhost:3000");
+
+        socket.on("connect", () => {
+            console.log("✅ Connected:", socket.id);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("❌ Disconnected");
+        });
+        socket.on("telemetryUpdate", (data) => {
+            console.log("📡 Live update:", data);
+        });
+    </script>
+</body>
+
+</html>

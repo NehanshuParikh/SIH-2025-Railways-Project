@@ -4,7 +4,6 @@ import sectionModel from '../models/sectionModels.js'
 import trackModel from '../models/trackModels.js'
 import signalModel from '../models/signalModels.js'
 import trainModel from '../models/trainModels.js'
-import telemetryModel from '../models/telementaryModels.js'
 
 // ===================== ADD STATION =====================
 export const addStation = async (req, res) => {
@@ -351,25 +350,7 @@ export const deleteTrain = async (req, res) => {
   }
 };
 
-// ===================== TELEMETRY =====================
-export const getTelemetryByTrain = async (req, res) => {
-  try {
-    const admin = req.admin;
-    if (!admin) return res.status(401).json({ message: "Unauthorized", success: false });
 
-    const { trainId } = req.params;
-    const telemetry = await Telemetry.find({ trainId }).sort({ timestamp: -1 }).limit(1);
-
-    if (!telemetry || telemetry.length === 0) {
-      return res.status(404).json({ message: "No telemetry found for this train", success: false });
-    }
-
-    res.status(200).json({ message: "Latest telemetry fetched", success: true, telemetry: telemetry[0] });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching telemetry", success: false });
-  }
-};
 
 // ===================== DECISIONS / AI =====================
 export const resolveConflict = async (req, res) => {
@@ -397,3 +378,4 @@ export const listDecisionLogs = async (req, res) => {
     res.status(500).json({ message: "Error fetching decision logs", success: false });
   }
 };
+

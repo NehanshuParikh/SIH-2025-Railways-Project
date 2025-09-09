@@ -6,8 +6,8 @@ import {
   addTrack, getTracksBySection,
   addSignal, getSignalsByTrack,
   addTrain, listTrains, getTrainById, updateTrain, deleteTrain,
-  getTelemetryByTrain,
-  resolveConflict, listDecisionLogs
+  resolveConflict, listDecisionLogs,
+
 } from "../controllers/adminControllers.js";
 
 import { authAdminMiddleware } from "../middlewares/authMiddleware.js";
@@ -34,7 +34,6 @@ router.get("/v1/view/train/:id",authAdminMiddleware, getTrainById);
 router.put("/v1/update/train/:id",authAdminMiddleware, updateTrain);
 router.delete("/v1/delete/train/:id",authAdminMiddleware, deleteTrain);
 
-router.get("/v1/view/telemetry/:trainId",authAdminMiddleware, getTelemetryByTrain);
 
 router.post("/v1/decisions/resolve-conflict",authAdminMiddleware, resolveConflict);
 router.get("/v1/decisions/logs",authAdminMiddleware, listDecisionLogs);

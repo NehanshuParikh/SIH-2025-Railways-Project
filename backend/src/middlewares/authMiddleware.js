@@ -58,3 +58,19 @@ export const authOperatorMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: "Invalid token", success: false });
   }
 };
+
+// middlewares/authRoleMiddleware.js
+export const authRoleMiddleware = (allowedRoles = []) => {
+  return (req, res, next) => {
+    const user = req.user || req.admin; // depending on how you set it
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!allowedRoles.includes(user.role)) {
+      return res.status(403).json({ message: "Forbidden: Insufficient role" });
+    }
+
+    next();
+  };
+};
