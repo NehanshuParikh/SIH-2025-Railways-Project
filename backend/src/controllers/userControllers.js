@@ -107,7 +107,7 @@ export const registerOperator = async (req, res) => {
 // ================== LOGIN ==================
 export const loginAdmin = async (req, res) => {
     const { userId, password } = req.body;
-
+  console.log(req.body)
     try {
         const admin = await userModel.findOne({ userId, role: "Admin" });
         if (!admin) {
@@ -240,11 +240,13 @@ export const loginSectionController = async (req, res) => {
       { expiresIn: "1d" }
     );
 
+    res.cookie("token", token, { httpOnly: true });
+
     res.status(200).json({
       message: "Login successful",
       success: true,
       token,
-      controller
+      sectionController: controller
     });
   } catch (err) {
     console.error(err);

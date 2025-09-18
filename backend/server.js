@@ -13,6 +13,7 @@ const io = new Server(server, {
   cors: { origin: "*" }, // later restrict to frontend domain
 });
 
+
 // 3️⃣ Handle socket connections
 io.on("connection", (socket) => {
   console.log("🔌 Client connected:", socket.id);

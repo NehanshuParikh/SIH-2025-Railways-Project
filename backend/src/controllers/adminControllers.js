@@ -116,10 +116,20 @@ export const listSections = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized", success: false });
     }
 
-    const sections = await sectionModel.find()
-      .populate("startStation endStation", "stationId name code")
-      .populate("createdBy", "name userId")
-      .sort({ sectionId: 1 });
+    const sections = await sectionModel
+      .find()
+      .populate("startStation", "name code stationId")
+      .populate("endStation", "name code stationId")
+      .populate({
+        path: "tracks",
+        populate: { path: "signals" }
+      })
+      .lean();
+
+    console.log(sections)
+
+    res.status(200).json({ message: "Sections fetched successfully", success: true, sections });
+
 
     res.status(200).json({ message: "Sections fetched successfully", success: true, sections });
   } catch (error) {
